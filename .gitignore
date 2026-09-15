@@ -1,0 +1,79 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Test, coverage and type-check caches
+.pytest_cache/
+.pytest*/
+.codex-pytest*/
+.test-tmp*/
+.phase*-pytest*/
+pytest_*/
+pytest-*/
+pytest_allfix_*/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+coverage.xml
+*-results.xml
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs, traces and runtime state
+*.log
+log*.txt
+outputs/
+results/
+tmp/
+temp/
+sample/result.jsonl
+sample/progress.json
+
+# Local/private datasets
+*.db
+data/finance.db
+data/**/*.db
+data/**/*.sqlite
+data/**/*.sqlite3
+data/documents/raw/
+
+# Generated retrieval artifacts
+*.faiss
+*.npy
+*.npz
+*.onnx
+
+# Evaluation runs and generated reports
+eval_v2/runs/
+eval_v2/testruns/
+eval_v2/reports/**/human_review_sheet.csv
+eval_v2/reports/**/objective_scores.json
+
+# Optional committed synthetic fixture
+!data/sample/
+!data/sample/finance_sample.db

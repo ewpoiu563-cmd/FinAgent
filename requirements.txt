@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+aiohttp
+python-dotenv
+requests
+dashscope
+PyMuPDF
+docling-slim[standard]==2.126.0
+faiss-cpu
+jieba
+rank-bm25
+redis

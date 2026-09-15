@@ -1,0 +1,4 @@
+{"run_id":"run-a","event_type":"first"}
+not-json
+{"run_id":"run-b","event_type":"other"}
+{"run_id":"run-a","event_type":"last"}

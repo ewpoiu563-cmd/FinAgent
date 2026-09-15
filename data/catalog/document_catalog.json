@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "catalog_doc_id": "doc_jianfan",
+      "index_doc_ids": [
+        "6c93724343cef6b9da70d51daa739e8a1c607a22-5d11f946465d"
+      ],
+      "source_file": "6c93724343cef6b9da70d51daa739e8a1c607a22.pdf",
+      "company_name": "珠海健帆生物科技股份有限公司",
+      "aliases": [
+        "健帆",
+        "健帆生物",
+        "健帆公司"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_xinlitai",
+      "index_doc_ids": [
+        "doc_xinlitai"
+      ],
+      "source_file": "52fd4a323d97356a463959671794e900699baae5.PDF",
+      "company_name": "深圳信立泰药业股份有限公司",
+      "aliases": [
+        "信立泰",
+        "深圳信立泰",
+        "信立泰药业"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_yaxia",
+      "index_doc_ids": [
+        "doc_yaxia"
+      ],
+      "source_file": "9b877e7db4809637c56eea234eaddc74cb20f9da.PDF",
+      "company_name": "浙江亚厦装饰股份有限公司",
+      "aliases": [
+        "亚厦",
+        "浙江亚厦",
+        "亚厦装饰"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_sinocera",
+      "index_doc_ids": [
+        "doc_sinocera"
+      ],
+      "source_file": "b58b0a129b2c62ca8b295d40c91134df5d5e603d.PDF",
+      "company_name": "山东国瓷功能材料股份有限公司",
+      "aliases": [
+        "国瓷",
+        "国瓷材料",
+        "山东国瓷"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_huangshan_capsule",
+      "index_doc_ids": [
+        "doc_huangshan_capsule"
+      ],
+      "source_file": "03c625c108ac0137f413dfd4136adb55c74b3805.PDF",
+      "company_name": "安徽黄山胶囊股份有限公司",
+      "aliases": [
+        "黄山胶囊",
+        "安徽黄山胶囊"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_kehua_hengsheng",
+      "index_doc_ids": [
+        "doc_kehua_hengsheng"
+      ],
+      "source_file": "5c2707b186a798118bba251cce8d1fc331b5cbba.PDF",
+      "company_name": "厦门科华恒盛股份有限公司",
+      "aliases": [
+        "科华恒盛",
+        "厦门科华恒盛",
+        "科华数据"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_nanling",
+      "index_doc_ids": [
+        "doc_nanling"
+      ],
+      "source_file": "96b461d6c6670928f7dc36f0c947e0c18340d5e2.PDF",
+      "company_name": "湖南南岭民用爆破器材股份有限公司",
+      "aliases": [
+        "南岭民爆",
+        "湖南南岭民爆",
+        "南岭爆破"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_tianyuan",
+      "index_doc_ids": [
+        "doc_tianyuan"
+      ],
+      "source_file": "e774a06e6b4db734424f7d9181b9515a08bea6cc.PDF",
+      "company_name": "中钢集团安徽天源科技股份有限公司",
+      "aliases": [
+        "中钢天源",
+        "安徽天源",
+        "天源科技"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_guodian",
+      "index_doc_ids": [
+        "doc_guodian"
+      ],
+      "source_file": "11463b6562c6ba2afde67a29bca314452ea9a2e0.PDF",
+      "company_name": "国电长源电力股份有限公司",
+      "aliases": [
+        "国电长源",
+        "长源电力",
+        "国电长源电力"
+      ],
+      "document_type": "prospectus"
+    },
+    {
+      "catalog_doc_id": "doc_anne",
+      "index_doc_ids": [
+        "doc_anne"
+      ],
+      "source_file": "ad2bf1b94db9ec7cb2689ace2daec396d2965dce.PDF",
+      "company_name": "厦门安妮股份有限公司",
+      "aliases": [
+        "安妮股份",
+        "厦门安妮",
+        "安妮"
+      ],
+      "document_type": "prospectus"
+    }
+  ]
+}

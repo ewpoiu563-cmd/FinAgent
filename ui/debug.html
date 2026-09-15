@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FinAgent Debug Console</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08111f;
+      --panel: rgba(16, 28, 48, .88);
+      --panel-2: #101d31;
+      --line: #263b59;
+      --text: #e8eef8;
+      --muted: #91a4bd;
+      --cyan: #41d9c2;
+      --blue: #63a6ff;
+      --amber: #f7bd61;
+      --red: #ff7588;
+      --green: #59d98e;
+      --shadow: 0 20px 60px rgba(0, 0, 0, .28);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(37, 117, 183, .23), transparent 31rem),
+        radial-gradient(circle at 94% 90%, rgba(31, 173, 151, .13), transparent 32rem),
+        var(--bg);
+      font: 14px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .shell { max-width: 1680px; margin: 0 auto; padding: 22px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .logo {
+      width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px;
+      background: linear-gradient(145deg, #42dfc5, #3386f2); color: #04111b;
+      font-weight: 900; box-shadow: 0 9px 28px rgba(65, 217, 194, .25);
+    }
+    h1 { margin: 0; font-size: 19px; letter-spacing: .2px; }
+    .subtitle, .muted { color: var(--muted); }
+    .subtitle { font-size: 12px; }
+    .status-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill { border: 1px solid var(--line); border-radius: 99px; padding: 5px 9px; color: var(--muted); background: #0b1728; }
+    .pill.ok { color: var(--green); border-color: rgba(89, 217, 142, .35); }
+    .pill.bad { color: var(--red); border-color: rgba(255, 117, 136, .35); }
+    .grid { display: grid; grid-template-columns: minmax(480px, 1.18fr) minmax(450px, .82fr); gap: 16px; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 17px; box-shadow: var(--shadow); overflow: hidden; backdrop-filter: blur(12px); }
+    .panel-head { min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+    .panel-title { font-weight: 700; }
+    .controls { display: flex; align-items: center; gap: 8px; }
+    input, textarea {
+      color: var(--text); background: #091424; border: 1px solid var(--line); border-radius: 10px; outline: none;
+    }
+    input:focus, textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(65, 217, 194, .1); }
+    #sessionId { width: 230px; padding: 8px 10px; font-family: ui-monospace, Consolas, monospace; }
+    .btn { border: 1px solid var(--line); color: var(--text); background: #13233a; border-radius: 10px; padding: 8px 11px; }
+    .btn:hover { border-color: #48678d; background: #172b47; }
+    .btn.primary { color: #06131b; border-color: transparent; background: linear-gradient(135deg, var(--cyan), #68b4ff); font-weight: 800; }
+    .btn.danger { color: var(--red); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+    .chat { min-height: 510px; height: calc(100vh - 286px); overflow: auto; padding: 18px; scroll-behavior: smooth; }
+    .empty { height: 100%; display: grid; place-items: center; text-align: center; color: var(--muted); }
+    .empty strong { display: block; color: var(--text); font-size: 17px; margin-bottom: 5px; }
+    .message { margin: 0 0 18px; display: flex; gap: 10px; align-items: flex-start; }
+    .message.user { flex-direction: row-reverse; }
+    .avatar { width: 28px; height: 28px; flex: 0 0 28px; display: grid; place-items: center; border-radius: 9px; background: #1b304d; color: var(--blue); font-size: 11px; font-weight: 800; }
+    .user .avatar { color: var(--cyan); }
+    .bubble { max-width: 86%; white-space: pre-wrap; overflow-wrap: anywhere; padding: 11px 13px; border: 1px solid var(--line); background: #0d192a; border-radius: 4px 13px 13px 13px; }
+    .user .bubble { background: #12314a; border-radius: 13px 4px 13px 13px; }
+    .message-meta { margin-top: 6px; color: var(--muted); font-size: 11px; }
+    .composer { padding: 14px; border-top: 1px solid var(--line); }
+    #question { display: block; width: 100%; min-height: 78px; max-height: 200px; resize: vertical; padding: 11px 12px; }
+    .composer-foot { margin-top: 9px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    kbd { padding: 2px 6px; color: var(--muted); background: #0a1422; border: 1px solid var(--line); border-radius: 5px; font-size: 11px; }
+    .right { display: grid; grid-template-rows: minmax(260px, .9fr) minmax(330px, 1.1fr); gap: 16px; height: calc(100vh - 102px); min-height: 700px; }
+    .context-body, .trace-body { height: calc(100% - 58px); overflow: auto; padding: 14px 16px; }
+    .kv { display: grid; grid-template-columns: 120px 1fr; gap: 8px 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .kv dt { color: var(--muted); }
+    .kv dd { margin: 0; overflow-wrap: anywhere; }
+    .history { margin-top: 12px; }
+    .history-row { border-left: 2px solid var(--line); margin: 0 0 10px; padding: 3px 0 3px 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .history-row.user { border-color: var(--cyan); }
+    .history-role { color: var(--muted); text-transform: uppercase; font-size: 10px; letter-spacing: .8px; }
+    .trace-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 12px; }
+    .metric { padding: 8px; background: #0b1727; border: 1px solid var(--line); border-radius: 9px; }
+    .metric b { display: block; font-size: 16px; color: var(--cyan); }
+    .metric span { color: var(--muted); font-size: 10px; }
+    .event { display: grid; grid-template-columns: 16px 1fr auto; gap: 9px; position: relative; padding: 0 0 14px; }
+    .event:not(:last-child)::before { content: ""; position: absolute; left: 7px; top: 15px; bottom: 0; width: 1px; background: var(--line); }
+    .dot { width: 9px; height: 9px; margin-top: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 3px #132640; z-index: 1; }
+    .event.error .dot, .event.failed .dot { background: var(--red); }
+    .event.completed .dot, .event.success .dot { background: var(--green); }
+    .event-title { font-family: ui-monospace, Consolas, monospace; font-size: 12px; overflow-wrap: anywhere; }
+    .event-info { color: var(--muted); font-size: 11px; }
+    .duration { color: var(--amber); font-family: ui-monospace, Consolas, monospace; font-size: 11px; white-space: nowrap; }
+    details { margin-top: 5px; }
+    summary { color: var(--muted); cursor: pointer; font-size: 11px; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; color: #b9c7da; background: #08121f; border-radius: 7px; padding: 8px; }
+    .spinner { display: inline-block; width: 10px; height: 10px; border: 2px solid #38516f; border-top-color: var(--cyan); border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 1050px) {
+      .grid { grid-template-columns: 1fr; }
+      .right { height: auto; grid-template-rows: 420px 540px; }
+      .chat { height: 560px; }
+    }
+    @media (max-width: 650px) {
+      .shell { padding: 10px; } header { align-items: flex-start; flex-direction: column; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
+      #sessionId { width: 100%; } .controls { width: 100%; } .trace-summary { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><div class="logo">F</div><div><h1>FinAgent Debug Console</h1><div class="subtitle">对话上下文 · SSE 输出 · 调用链观测</div></div></div>
+      <div class="status-row"><span class="pill" id="apiStatus">API 检查中</span><span class="pill" id="redisStatus">Redis 检查中</span><span class="pill" id="traceStatus">Trace 检查中</span></div>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <div class="panel-head">
+          <span class="panel-title">调试对话</span>
+          <div class="controls"><input id="sessionId" aria-label="Session ID"><button class="btn" id="newSession">新会话</button></div>
+        </div>
+        <div class="chat" id="chat"><div class="empty"><div><strong>开始一次可观测对话</strong>同一 Session ID 的后续问题会读取 Redis 上下文</div></div></div>
+        <form class="composer" id="composer">
+          <textarea id="question" placeholder="输入金融研究问题……" required></textarea>
+          <div class="composer-foot"><span class="muted"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 发送</span><button class="btn primary" id="send" type="submit">发送并追踪</button></div>
+        </form>
+      </section>
+
+      <aside class="right">
+        <section class="panel">
+          <div class="panel-head"><span class="panel-title">Redis 上下文</span><div class="controls"><button class="btn" id="refreshContext">刷新</button><button class="btn danger" id="clearContext">清空</button></div></div>
+          <div class="context-body" id="context"><span class="muted">正在读取……</span></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><span class="panel-title">调用链路</span><span class="muted" id="runLabel">尚未运行</span></div>
+          <div class="trace-body" id="trace"><div class="empty"><div><strong>暂无 Trace</strong>发送问题后这里会实时刷新</div></div></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const state = { running: false, runId: null, poller: null };
+
+    function randomId(prefix) {
+      const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      return `${prefix}-${id}`;
+    }
+    function setPill(el, text, ok) { el.textContent = text; el.className = `pill ${ok ? "ok" : "bad"}`; }
+    function clearEmpty() { const empty = $("chat").querySelector(".empty"); if (empty) empty.remove(); }
+    function addMessage(role, text, meta = "") {
+      clearEmpty();
+      const row = document.createElement("div"); row.className = `message ${role}`;
+      const avatar = document.createElement("div"); avatar.className = "avatar"; avatar.textContent = role === "user" ? "YOU" : "AI";
+      const content = document.createElement("div");
+      const bubble = document.createElement("div"); bubble.className = "bubble"; bubble.textContent = text;
+      const info = document.createElement("div"); info.className = "message-meta"; info.textContent = meta;
+      content.append(bubble, info); row.append(avatar, content); $("chat").append(row); $("chat").scrollTop = $("chat").scrollHeight;
+      return { bubble, info };
+    }
+    function formatValue(value) {
+      if (value == null || value === "") return "—";
+      return Array.isArray(value) ? (value.join(", ") || "—") : String(value);
+    }
+    async function fetchJSON(url, options) {
+      const response = await fetch(url, { cache: "no-store", ...options });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.detail || `HTTP ${response.status}`);
+      return body;
+    }
+    async function loadStatus() {
+      try {
+        const data = await fetchJSON("/api/debug/status");
+        setPill($("apiStatus"), "API 已连接", true);
+        setPill($("redisStatus"), `Redis ${data.redis_status}`, data.redis_status === "connected");
+        const traceText = !data.trace_enabled ? "Trace 未启用" : data.trace_include_content ? "Trace 输入输出已启用" : "Trace 仅元数据";
+        setPill($("traceStatus"), traceText, data.trace_enabled && data.trace_include_content);
+      } catch (error) {
+        setPill($("apiStatus"), "API 不可用", false);
+      }
+    }
+    async function loadContext() {
+      const sessionId = $("sessionId").value.trim();
+      if (!sessionId) return;
+      $("context").innerHTML = '<span class="muted">正在读取……</span>';
+      try {
+        const data = await fetchJSON(`/api/debug/session/${encodeURIComponent(sessionId)}`);
+        if (!data.available) { $("context").textContent = data.reason; return; }
+        if (!data.exists) { $("context").innerHTML = '<span class="muted">该会话尚无服务端上下文。发送第一条消息后写入 Redis。</span>'; return; }
+        const s = data.state;
+        $("context").replaceChildren();
+        const dl = document.createElement("dl"); dl.className = "kv";
+        [["当前实体", s.current_entity], ["文档范围", s.current_doc_scope], ["Last run", s.last_run_id], ["TTL", `${data.ttl_seconds}s`], ["对话摘要", s.conversation_summary]].forEach(([k, v]) => {
+          const dt = document.createElement("dt"); dt.textContent = k; const dd = document.createElement("dd"); dd.textContent = formatValue(v); dl.append(dt, dd);
+        });
+        const history = document.createElement("div"); history.className = "history";
+        (s.recent_messages || []).forEach((m) => {
+          const row = document.createElement("div"); row.className = `history-row ${m.role || ""}`;
+          const role = document.createElement("div"); role.className = "history-role"; role.textContent = m.role || "message";
+          const text = document.createElement("div"); text.textContent = m.content || ""; row.append(role, text); history.append(row);
+        });
+        $("context").append(dl, history);
+      } catch (error) { $("context").textContent = `上下文读取失败：${error.message}`; }
+    }
+    function metric(label, value) {
+      const el = document.createElement("div"); el.className = "metric";
+      const b = document.createElement("b"); b.textContent = formatValue(value); const span = document.createElement("span"); span.textContent = label; el.append(b, span); return el;
+    }
+    function renderTrace(data) {
+      const root = $("trace"); root.replaceChildren();
+      const summary = data.summary || {};
+      if (data.events.length) {
+        const metrics = document.createElement("div"); metrics.className = "trace-summary";
+        metrics.append(metric("事件", data.event_count), metric("总耗时", summary.duration_ms == null ? "运行中" : `${summary.duration_ms}ms`), metric("LLM 调用", summary.logical_llm_call_count), metric("工具调用", summary.tool_call_count));
+        root.append(metrics);
+      }
+      data.events.forEach((event) => {
+        const item = document.createElement("div"); item.className = `event ${event.status || ""}`;
+        const dot = document.createElement("div"); dot.className = "dot";
+        const main = document.createElement("div");
+        const attrs = event.attributes || {};
+        const displayName = attrs.tool_name
+          ? `${attrs.tool_name} · ${event.event_type.split(".").pop()}`
+          : event.event_type.startsWith("llm.call")
+            ? `LLM ${attrs.operation || "call"} · ${event.event_type.split(".").pop()}`
+            : event.event_type;
+        const title = document.createElement("div"); title.className = "event-title"; title.textContent = displayName;
+        const info = document.createElement("div"); info.className = "event-info";
+        info.textContent = [attrs.execution_path, event.stage, event.source, event.task_id, attrs.iteration == null ? null : `iteration ${attrs.iteration}`, event.status].filter(Boolean).join(" · "); main.append(title, info);
+        [["输入 input", attrs.input, event.event_type === "tool.call.started"], ["输出 output", attrs.output, event.event_type.startsWith("tool.call") && event.event_type !== "tool.call.started"]].forEach(([label, value, opened]) => {
+          if (value == null) return;
+          const details = document.createElement("details"); details.open = opened;
+          const caption = document.createElement("summary"); caption.textContent = label;
+          const pre = document.createElement("pre"); pre.textContent = JSON.stringify(value, null, 2); details.append(caption, pre); main.append(details);
+        });
+        const metadata = Object.fromEntries(Object.entries(attrs).filter(([key]) => !["input", "output"].includes(key)));
+        if (Object.keys(metadata).length) {
+          const details = document.createElement("details"); const caption = document.createElement("summary"); caption.textContent = "元数据 metadata";
+          const pre = document.createElement("pre"); pre.textContent = JSON.stringify(metadata, null, 2); details.append(caption, pre); main.append(details);
+        }
+        const duration = document.createElement("div"); duration.className = "duration"; duration.textContent = event.duration_ms == null ? "" : `${event.duration_ms} ms`;
+        item.append(dot, main, duration); root.append(item);
+      });
+      if (!data.events.length) root.innerHTML = '<div class="empty"><div><span class="spinner"></span><br><br>等待 Trace 事件……</div></div>';
+    }
+    async function loadTrace() {
+      if (!state.runId) return;
+      try { renderTrace(await fetchJSON(`/api/debug/trace/${encodeURIComponent(state.runId)}`)); } catch (error) { $("trace").textContent = `Trace 读取失败：${error.message}`; }
+    }
+    function processSSEBlock(block, assistant) {
+      let event = "message"; const dataLines = [];
+      block.split(/\r?\n/).forEach((line) => {
+        if (line.startsWith("event:")) event = line.slice(6).trim();
+        if (line.startsWith("data:")) dataLines.push(line.slice(5).trimStart());
+      });
+      if (event === "Ping") { assistant.info.textContent = "Agent 运行中 · 收到 keepalive"; return; }
+      if (!dataLines.length) return;
+      try { const data = JSON.parse(dataLines.join("\n")); if (data.answer) assistant.bubble.textContent += data.answer; } catch (_) {}
+    }
+    async function runQuestion(question) {
+      state.running = true; $("send").disabled = true; $("sessionId").disabled = true;
+      const sessionId = $("sessionId").value.trim(); state.runId = randomId("ui-run");
+      localStorage.setItem("finagent.debug.session", sessionId); $("runLabel").textContent = state.runId;
+      addMessage("user", question, sessionId);
+      const assistant = addMessage("assistant", "", "Agent 运行中");
+      const started = performance.now(); state.poller = setInterval(loadTrace, 900); await loadTrace();
+      try {
+        const response = await fetch("/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, session_id: sessionId, run_id: state.runId }) });
+        if (!response.ok) { const body = await response.text(); throw new Error(`HTTP ${response.status}: ${body}`); }
+        if (!response.body) throw new Error("浏览器不支持流式响应");
+        const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = "";
+        while (true) {
+          const { value, done } = await reader.read(); buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+          const blocks = buffer.split(/\r?\n\r?\n/); buffer = blocks.pop() || ""; blocks.forEach((block) => processSSEBlock(block, assistant));
+          $("chat").scrollTop = $("chat").scrollHeight; if (done) break;
+        }
+        if (buffer.trim()) processSSEBlock(buffer, assistant);
+        assistant.info.textContent = `完成 · ${Math.round(performance.now() - started)} ms · ${state.runId}`;
+      } catch (error) {
+        assistant.bubble.textContent ||= "请求失败"; assistant.info.textContent = error.message; assistant.bubble.style.borderColor = "var(--red)";
+      } finally {
+        clearInterval(state.poller); state.poller = null; await loadTrace(); await loadContext();
+        state.running = false; $("send").disabled = false; $("sessionId").disabled = false; $("question").focus();
+      }
+    }
+
+    $("composer").addEventListener("submit", async (event) => { event.preventDefault(); const q = $("question").value.trim(); if (!q || state.running) return; $("question").value = ""; await runQuestion(q); });
+    $("question").addEventListener("keydown", (event) => { if (event.ctrlKey && event.key === "Enter") $("composer").requestSubmit(); });
+    $("refreshContext").addEventListener("click", loadContext);
+    $("sessionId").addEventListener("change", () => { localStorage.setItem("finagent.debug.session", $("sessionId").value.trim()); loadContext(); });
+    $("newSession").addEventListener("click", () => { if (state.running) return; $("sessionId").value = randomId("ui-session"); localStorage.setItem("finagent.debug.session", $("sessionId").value); $("chat").innerHTML = '<div class="empty"><div><strong>新会话已创建</strong>发送消息后将写入独立的 Redis 上下文</div></div>'; state.runId = null; $("runLabel").textContent = "尚未运行"; $("trace").innerHTML = '<div class="empty"><div><strong>暂无 Trace</strong>发送问题后这里会实时刷新</div></div>'; loadContext(); });
+    $("clearContext").addEventListener("click", async () => { const id = $("sessionId").value.trim(); if (!id || !confirm(`确定清空会话 ${id} 的 Redis 上下文？`)) return; try { await fetchJSON(`/api/debug/session/${encodeURIComponent(id)}`, { method: "DELETE" }); await loadContext(); } catch (error) { alert(error.message); } });
+
+    $("sessionId").value = localStorage.getItem("finagent.debug.session") || randomId("ui-session");
+    loadStatus(); loadContext(); $("question").focus();
+  </script>
+</body>
+</html>

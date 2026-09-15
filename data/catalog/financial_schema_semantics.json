@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "database": "data/finance.db",
+  "verified_at": "2026-09-15",
+  "metrics": {
+    "holding_quantity": {
+      "table": "基金股票持仓明细",
+      "column": "数量",
+      "sqlite_type": "REAL",
+      "business_meaning": "单个基金在一个持仓报告快照中持有目标股票的数量",
+      "synonyms": ["持有数量", "持仓数量", "数量"]
+    },
+    "holding_market_value": {
+      "table": "基金股票持仓明细",
+      "column": "市值",
+      "sqlite_type": "REAL",
+      "business_meaning": "单个基金在一个持仓报告快照中持有目标股票的市值",
+      "synonyms": ["持有市值", "持仓市值", "市值"]
+    },
+    "holding_nav_ratio": {
+      "table": "基金股票持仓明细",
+      "column": "市值占基金资产净值比",
+      "sqlite_type": "REAL",
+      "business_meaning": "目标股票持仓市值占基金资产净值的比例",
+      "synonyms": ["市值占基金资产净值比", "净值占比", "持仓占比"]
+    },
+    "asset_net_value": {
+      "table": "基金日行情表",
+      "column": "资产净值",
+      "sqlite_type": "REAL",
+      "business_meaning": "基金在一个交易日快照上的资产净值，用于表达基金资产规模",
+      "synonyms": ["资产净值", "基金规模", "资产规模"]
+    },
+    "unit_net_value": {
+      "table": "基金日行情表",
+      "column": "单位净值",
+      "sqlite_type": "REAL",
+      "business_meaning": "基金在交易日的单位净值",
+      "synonyms": ["单位净值"]
+    },
+    "period_end_shares": {
+      "table": "基金规模变动表",
+      "column": "报告期期末基金总份额",
+      "sqlite_type": "REAL",
+      "business_meaning": "报告期结束时的基金总份额，不等于资产净值",
+      "synonyms": ["期末基金总份额", "期末总份额", "基金总份额"]
+    },
+    "bond_holding_quantity": {
+      "table": "基金债券持仓明细", "column": "持债数量", "sqlite_type": "REAL",
+      "business_meaning": "基金在债券持仓报告快照中的持债数量", "synonyms": ["持债数量", "债券持仓数量"]
+    },
+    "bond_holding_market_value": {
+      "table": "基金债券持仓明细", "column": "持债市值", "sqlite_type": "REAL",
+      "business_meaning": "基金在债券持仓报告快照中的持债市值", "synonyms": ["持债市值", "债券持仓市值"]
+    },
+    "bond_holding_nav_ratio": {
+      "table": "基金债券持仓明细", "column": "持债市值占基金资产净值比", "sqlite_type": "REAL",
+      "business_meaning": "债券持仓市值占基金资产净值比例", "synonyms": ["持债占比", "债券持仓占比"]
+    },
+    "convertible_holding_quantity": {
+      "table": "基金可转债持仓明细", "column": "数量", "sqlite_type": "REAL",
+      "business_meaning": "基金在可转债报告快照中的持有数量", "synonyms": ["可转债数量", "可转债持仓数量"]
+    },
+    "convertible_holding_market_value": {
+      "table": "基金可转债持仓明细", "column": "市值", "sqlite_type": "REAL",
+      "business_meaning": "基金在可转债报告快照中的持仓市值", "synonyms": ["可转债市值", "可转债持仓市值"]
+    },
+    "convertible_holding_nav_ratio": {
+      "table": "基金可转债持仓明细", "column": "市值占基金资产净值比", "sqlite_type": "REAL",
+      "business_meaning": "可转债持仓市值占基金资产净值比例", "synonyms": ["可转债占比", "可转债持仓占比"]
+    },
+    "institutional_holder_shares": {
+      "table": "基金份额持有人结构", "column": "机构投资者持有的基金份额", "sqlite_type": "REAL",
+      "business_meaning": "报告期末机构投资者持有的基金份额", "synonyms": ["机构持有份额", "机构投资者份额"]
+    },
+    "institutional_holder_ratio": {
+      "table": "基金份额持有人结构", "column": "机构投资者持有的基金份额占总份额比例", "sqlite_type": "REAL",
+      "business_meaning": "报告期末机构投资者持有份额占总份额比例", "synonyms": ["机构持有比例", "机构投资者占比"]
+    },
+    "individual_holder_shares": {
+      "table": "基金份额持有人结构", "column": "个人投资者持有的基金份额", "sqlite_type": "REAL",
+      "business_meaning": "报告期末个人投资者持有的基金份额", "synonyms": ["个人持有份额", "个人投资者份额"]
+    },
+    "individual_holder_ratio": {
+      "table": "基金份额持有人结构", "column": "个人投资者持有的基金份额占总份额比例", "sqlite_type": "REAL",
+      "business_meaning": "报告期末个人投资者持有份额占总份额比例", "synonyms": ["个人持有比例", "个人投资者占比"]
+    },
+    "a_stock_close": {
+      "table": "A股票日行情表", "column": "收盘价(元)", "sqlite_type": "REAL",
+      "business_meaning": "A股当日收盘价", "synonyms": ["A股收盘价"]
+    },
+    "a_stock_open": {
+      "table": "A股票日行情表", "column": "今开盘(元)", "sqlite_type": "REAL",
+      "business_meaning": "A股当日开盘价", "synonyms": ["A股开盘价"]
+    },
+    "a_stock_high": {
+      "table": "A股票日行情表", "column": "最高价(元)", "sqlite_type": "REAL",
+      "business_meaning": "A股当日最高价", "synonyms": ["A股最高价"]
+    },
+    "a_stock_low": {
+      "table": "A股票日行情表", "column": "最低价(元)", "sqlite_type": "REAL",
+      "business_meaning": "A股当日最低价", "synonyms": ["A股最低价"]
+    },
+    "a_stock_volume": {
+      "table": "A股票日行情表", "column": "成交量(股)", "sqlite_type": "REAL",
+      "business_meaning": "A股当日成交量", "synonyms": ["A股成交量"]
+    },
+    "a_stock_turnover": {
+      "table": "A股票日行情表", "column": "成交金额(元)", "sqlite_type": "REAL",
+      "business_meaning": "A股当日成交金额", "synonyms": ["A股成交金额"]
+    },
+    "hk_stock_close": {
+      "table": "港股票日行情表", "column": "收盘价(元)", "sqlite_type": "REAL",
+      "business_meaning": "港股当日收盘价", "synonyms": ["港股收盘价"]
+    },
+    "hk_stock_open": {
+      "table": "港股票日行情表", "column": "今开盘(元)", "sqlite_type": "REAL",
+      "business_meaning": "港股当日开盘价", "synonyms": ["港股开盘价"]
+    },
+    "hk_stock_high": {
+      "table": "港股票日行情表", "column": "最高价(元)", "sqlite_type": "REAL",
+      "business_meaning": "港股当日最高价", "synonyms": ["港股最高价"]
+    },
+    "hk_stock_low": {
+      "table": "港股票日行情表", "column": "最低价(元)", "sqlite_type": "REAL",
+      "business_meaning": "港股当日最低价", "synonyms": ["港股最低价"]
+    },
+    "hk_stock_volume": {
+      "table": "港股票日行情表", "column": "成交量(股)", "sqlite_type": "REAL",
+      "business_meaning": "港股当日成交量", "synonyms": ["港股成交量"]
+    },
+    "hk_stock_turnover": {
+      "table": "港股票日行情表", "column": "成交金额(元)", "sqlite_type": "REAL",
+      "business_meaning": "港股当日成交金额", "synonyms": ["港股成交金额"]
+    }
+  },
+  "dimensions": {
+    "fund_code": {"table": "基金基本信息", "column": "基金代码", "sqlite_type": "TEXT"},
+    "fund_short_name": {"table": "基金基本信息", "column": "基金简称", "sqlite_type": "TEXT"},
+    "fund_full_name": {"table": "基金基本信息", "column": "基金全称", "sqlite_type": "TEXT"},
+    "fund_type": {"table": "基金基本信息", "column": "基金类型", "sqlite_type": "TEXT"},
+    "stock_code": {"table": "基金股票持仓明细", "column": "股票代码", "sqlite_type": "TEXT"},
+    "stock_name": {"table": "基金股票持仓明细", "column": "股票名称", "sqlite_type": "TEXT"},
+    "bond_name": {"table": "基金债券持仓明细", "column": "债券名称", "sqlite_type": "TEXT"},
+    "bond_type": {"table": "基金债券持仓明细", "column": "债券类型", "sqlite_type": "TEXT"},
+    "convertible_underlying_stock_code": {"table": "基金可转债持仓明细", "column": "对应股票代码", "sqlite_type": "TEXT"},
+    "industry_standard": {"table": "A股公司行业划分表", "column": "行业划分标准", "sqlite_type": "TEXT"},
+    "primary_industry": {"table": "A股公司行业划分表", "column": "一级行业名称", "sqlite_type": "TEXT"},
+    "secondary_industry": {"table": "A股公司行业划分表", "column": "二级行业名称", "sqlite_type": "TEXT"}
+  },
+  "temporal_fields": {
+    "holding_date": {
+      "table": "基金股票持仓明细",
+      "column": "持仓日期",
+      "sqlite_type": "TEXT",
+      "storage_format": "YYYYMMDD",
+      "observed_min": "20190102",
+      "observed_max": "20211231",
+      "observed_distinct_count": 167
+    },
+    "trading_date": {
+      "table": "基金日行情表",
+      "column": "交易日期",
+      "sqlite_type": "TEXT",
+      "storage_format": "YYYYMMDD",
+      "observed_min": "20190101",
+      "observed_max": "20211231",
+      "observed_distinct_count": 989
+    },
+    "scale_period_end": {
+      "table": "基金规模变动表",
+      "column": "截止日期",
+      "sqlite_type": "TIMESTAMP",
+      "storage_format": "YYYY-MM-DD HH:MM:SS",
+      "observed_min": "2019-03-31 00:00:00",
+      "observed_max": "2021-12-31 00:00:00",
+      "observed_distinct_count": 12
+    },
+    "scale_announcement": {
+      "table": "基金规模变动表",
+      "column": "公告日期",
+      "sqlite_type": "TIMESTAMP",
+      "storage_format": "YYYY-MM-DD HH:MM:SS",
+      "observed_min": "2019-04-18 00:00:00",
+      "observed_max": "2022-03-31 00:00:00",
+      "observed_distinct_count": 104
+    },
+    "fund_inception_date": {
+      "table": "基金基本信息",
+      "column": "成立日期",
+      "sqlite_type": "TEXT",
+      "storage_format": "YYYYMMDD",
+      "observed_min": "20190103",
+      "observed_max": "20201231",
+      "observed_distinct_count": 469
+    },
+    "fund_maturity_date": {
+      "table": "基金基本信息",
+      "column": "到期日期",
+      "sqlite_type": "TEXT",
+      "storage_format": "YYYYMMDD",
+      "observed_min": "20220106",
+      "observed_max": "30001231",
+      "observed_distinct_count": 146
+    },
+    "bond_holding_date": {
+      "table": "基金债券持仓明细", "column": "持仓日期", "sqlite_type": "TEXT", "storage_format": "YYYYMMDD"
+    },
+    "convertible_holding_date": {
+      "table": "基金可转债持仓明细", "column": "持仓日期", "sqlite_type": "TEXT", "storage_format": "YYYYMMDD"
+    },
+    "holder_period_end": {
+      "table": "基金份额持有人结构", "column": "截止日期", "sqlite_type": "TIMESTAMP", "storage_format": "YYYY-MM-DD HH:MM:SS"
+    },
+    "holder_announcement": {
+      "table": "基金份额持有人结构", "column": "公告日期", "sqlite_type": "TIMESTAMP", "storage_format": "YYYY-MM-DD HH:MM:SS"
+    },
+    "a_stock_trading_date": {
+      "table": "A股票日行情表", "column": "交易日", "sqlite_type": "TEXT", "storage_format": "YYYYMMDD"
+    },
+    "hk_stock_trading_date": {
+      "table": "港股票日行情表", "column": "交易日", "sqlite_type": "TEXT", "storage_format": "YYYYMMDD"
+    },
+    "stock_industry_date": {
+      "table": "A股公司行业划分表", "column": "交易日期", "sqlite_type": "TEXT", "storage_format": "YYYYMMDD"
+    }
+  }
+}
